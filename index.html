@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRADUACIÓN | EBC 2026</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Alata&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta Conceptual: Gris, Marfil (Ivory) y Negro */
+            --ebc-grey: #A9A9A9; 
+            --ebc-ivory: #FFFFF0; 
+            --text-light: #F8F9FA; 
+            --bg-dark: #050505;
+            --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- ARQUITECTURA BASE --- */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif;
+            color: var(--text-light);
+            line-height: 1.8; 
+            overflow-x: hidden;
+            background-color: var(--bg-dark);
+        }
+
+        /* --- FONDO DE IMAGEN (3.png) --- */
+        .bg-image {
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background-image: url('3.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -3;
+        }
+
+        /* Capa de oscurecimiento suave para dar contraste a los textos flotantes */
+        .overlay {
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.85) 100%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* --- TIPOGRAFÍA ALATA --- */
+        h1, h2, h3, h4, .accent-title, .date-box, .time-content span, .dish span {
+            font-family: 'Alata', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: normal;
+        }
+
+        /* --- ELEMENTOS CONCEPTUALES: SEMI PÍLDORAS SIN RELLENO CON 20% OVERLAP --- */
+        .pills-container {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: clamp(100px, 15vw, 180px);
+            height: 200px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .pills-left { left: 0; }
+        .pills-right { right: 0; }
+
+        .pill {
+            position: absolute;
+            height: 40px; /* Altura base para calcular el 20% (8px) */
+            background: transparent;
+            border-style: solid;
+            border-width: 2px;
+            opacity: 0.6;
+        }
+
+        /* -- LADO IZQUIERDO -- */
+        .pills-left .pill-ivory {
+            border-color: var(--ebc-ivory);
+            width: 80%;
+            top: 80px; /* Posición central */
+            left: 0;
+            border-radius: 0 50px 50px 0; /* Solo redondeado derecha */
+            border-left: none;
+        }
+        .pills-left .pill-grey-1 {
+            border-color: var(--ebc-grey);
+            width: 100%; /* Más hacia la derecha */
+            top: 48px; /* Solapa exactamente 8px (20% de 40px) sobre la ivory */
+            left: 0;
+            border-radius: 0 50px 50px 0;
+            border-left: none;
+        }
+        .pills-left .pill-grey-2 {
+            border-color: var(--ebc-grey);
+            width: 65%; /* Más retraída hacia la izquierda */
+            top: 112px; /* Solapa exactamente 8px (20%) sobre la ivory */
+            left: 0;
+            border-radius: 0 50px 50px 0;
+            border-left: none;
+        }
+
+        /* -- LADO DERECHO (Efecto Espejo) -- */
+        .pills-right .pill-ivory {
+            border-color: var(--ebc-ivory);
+            width: 80%;
+            top: 80px;
+            right: 0;
+            border-radius: 50px 0 0 50px; /* Solo redondeado izquierda */
+            border-right: none;
+        }
+        .pills-right .pill-grey-1 {
+            border-color: var(--ebc-grey);
+            width: 100%; /* Más hacia la izquierda */
+            top: 48px; 
+            right: 0;
+            border-radius: 50px 0 0 50px;
+            border-right: none;
+        }
+        .pills-right .pill-grey-2 {
+            border-color: var(--ebc-grey);
+            width: 65%; /* Más retraída hacia la derecha */
+            top: 112px; 
+            right: 0;
+            border-radius: 50px 0 0 50px;
+            border-right: none;
+        }
+
+        /* --- NUEVA ESTRUCTURA EDITORIAL (SIN CONTENEDORES) --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .reveal-node { 
+            opacity: 0; 
+            transform: translateY(30px);
+            animation: reveal 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
+        }
+
+        @keyframes reveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section {
+            margin-bottom: 150px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--ebc-ivory);
+            margin-bottom: 60px;
+            letter-spacing: 6px;
+        }
+
+        /* --- PORTADA --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        header h1 { 
+            font-size: clamp(3.5rem, 12vw, 6.5rem); 
+            margin-bottom: 5px;
+            color: var(--ebc-ivory);
+            letter-spacing: 15px;
+        }
+
+        header p { 
+            font-size: 1.2rem; 
+            letter-spacing: 12px; 
+            color: var(--ebc-grey); 
+        }
+
+        .decorative-line {
+            width: 1px;
+            height: 100px;
+            background: var(--ebc-grey);
+            margin: 50px auto 0;
+        }
+
+        /* --- FECHA Y UBICACIÓN --- */
+        .date-box {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            letter-spacing: 8px;
+            color: var(--ebc-ivory);
+            margin-bottom: 80px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .date-box span {
+            border-bottom: 1px solid var(--ebc-grey);
+            padding-bottom: 10px;
+        }
+
+        .location-info h3 {
+            font-size: 2rem;
+            color: var(--ebc-ivory);
+            margin-bottom: 20px;
+        }
+
+        .location-info p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            padding: 18px 50px;
+            border: 1px solid var(--ebc-ivory);
+            color: var(--ebc-ivory);
+            text-decoration: none;
+            font-family: 'Alata', sans-serif;
+            letter-spacing: 4px;
+            font-size: 0.95rem;
+            border-radius: 50px;
+            transition: var(--transition-smooth);
+            background: transparent;
+            text-transform: uppercase;
+        }
+
+        .btn-outline:hover {
+            background: var(--ebc-ivory);
+            color: var(--bg-dark);
+        }
+
+        /* --- ITINERARIO CENTRADO (LÍNEA VERTICAL) --- */
+        .timeline-grid {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        /* Línea central */
+        .timeline-grid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            background: rgba(169, 169, 169, 0.4);
+        }
+
+        .time-item {
+            position: relative;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .time-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Punto central */
+        .time-node {
+            width: 10px;
+            height: 10px;
+            background: var(--ebc-ivory);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 0 6px var(--bg-dark); /* Crea espacio vacío alrededor del punto */
+        }
+
+        .time-content {
+            padding-top: 30px; /* Empuja el texto debajo del punto */
+        }
+
+        .time-content span {
+            display: block;
+            color: var(--ebc-ivory);
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .time-content p {
+            color: var(--text-light);
+            font-weight: 300;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --- MENÚ EDITORIAL LIBRE --- */
+        .menu-category {
+            margin-bottom: 70px;
+        }
+
+        .menu-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .menu-category h4 {
+            color: var(--ebc-grey);
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            letter-spacing: 6px;
+        }
+
+        .dish {
+            margin-bottom: 30px;
+        }
+
+        .dish span {
+            display: block;
+            color: var(--ebc-ivory);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .dish p {
+            font-weight: 300;
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        /* --- RECOMENDACIONES EDITORIALES (SIN CAJAS) --- */
+        .recs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 60px;
+        }
+
+        .rec-card {
+            text-align: center;
+        }
+
+        .rec-card h4 {
+            color: var(--ebc-ivory);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        .rec-card p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: var(--ebc-grey);
+        }
+
+        /* --- AUDIO --- */
+        #music-btn {
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            width: 60px; 
+            height: 60px;
+            border-radius: 50%; 
+            z-index: 5000; 
+            border: 1px solid var(--ebc-ivory);
+            background: rgba(5, 5, 5, 0.6); 
+            cursor: pointer;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.5rem;
+            transition: var(--transition-smooth); 
+            color: var(--text-light);
+            backdrop-filter: blur(5px);
+        }
+
+        #music-btn:hover { 
+            background: var(--ebc-ivory);
+            color: var(--bg-dark);
+        }
+
+        footer { 
+            padding: 80px 20px; 
+            text-align: center; 
+            border-top: 1px solid rgba(169, 169, 169, 0.2); 
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .date-box { font-size: 2rem; gap: 20px; }
+            section { margin-bottom: 100px; }
+            .section-title { font-size: 2rem; margin-bottom: 40px; }
+            .pills-container { width: 80px; }
+            .pill { height: 30px; }
+            
+            .pills-left .pill-ivory { top: 60px; }
+            .pills-left .pill-grey-1 { top: 36px; }
+            .pills-left .pill-grey-2 { top: 84px; }
+            
+            .pills-right .pill-ivory { top: 60px; }
+            .pills-right .pill-grey-1 { top: 36px; }
+            .pills-right .pill-grey-2 { top: 84px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-image"></div>
+    <div class="overlay"></div>
+
+    <div class="pills-container pills-left">
+        <div class="pill pill-grey-1"></div>
+        <div class="pill pill-ivory"></div>
+        <div class="pill pill-grey-2"></div>
+    </div>
+
+    <div class="pills-container pills-right">
+        <div class="pill pill-grey-1"></div>
+        <div class="pill pill-ivory"></div>
+        <div class="pill pill-grey-2"></div>
+    </div>
+
+    <audio id="gradAudio" loop preload="auto" playsinline>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-btn" onclick="gestionarMusica()">🔇</button>
+
+    <div class="container">
+        
+        <header>
+            <div class="reveal-node">
+                <h1>EBC</h1>
+                <p>GENERACIÓN 2026</p>
+            </div>
+            <div class="decorative-line reveal-node" style="animation-delay: 0.3s;"></div>
+        </header>
+
+        <main>
+            <section class="info-section">
+                <div class="date-box reveal-node">
+                    <span>04</span> <span>07</span> <span>26</span>
+                </div>
+
+                <div class="location-info reveal-node">
+                    <h3>RECEPCIÓN</h3>
+                    <p>C5<br>Estado de México</p>
+                    <a href="https://maps.app.goo.gl/D6DzEB2mFNfSFHJm8" target="_blank" class="btn-outline">Ver Ubicación</a>
+                </div>
+            </section>
+
+            <section class="timeline-section reveal-node">
+                <h3 class="section-title">Itinerario</h3>
+                <div class="timeline-grid">
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>07:30 PM</span>
+                            <p>Recepción</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>08:00 PM</span>
+                            <p>Sax</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>09:00 PM</span>
+                            <p>Cena / Familia Violinista</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>10:30 PM</span>
+                            <p>Palabras</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>10:35 PM</span>
+                            <p>Brindis</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>10:40 PM</span>
+                            <p>Se abre pista</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>11:00 PM</span>
+                            <p>Cabina Espejo / Cabina Inflable</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>11:30 PM</span>
+                            <p>Carrito de Shots</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>01:00 AM</span>
+                            <p>Tornafiesta (Chilaquiles)</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>02:30 AM</span>
+                            <p>Fin</p>
+                        </div>
+                    </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>02:30 AM - 03:30 AM</span>
+                            <p>Desalojo</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="menu-section reveal-node">
+                <h3 class="section-title">Menú</h3>
+
+                <div class="menu-category">
+                    <h4>Menú Principal</h4>
+                    
+                    <div class="dish">
+                        <span>PRIMER TIEMPO</span>
+                        <p>Ensalada sofía</p>
+                    </div>
+                    <div class="dish">
+                        <span>SEGUNDO TIEMPO</span>
+                        <p>Crema de jitomate rostizado</p>
+                    </div>
+                    <div class="dish">
+                        <span>PLATO FUERTE</span>
+                        <p>Filete en salsa de vino tinto con lluvia de pistaches</p>
+                    </div>
+                    <div class="dish">
+                        <span>GUARNICIONES</span>
+                        <p>Papa rellena<br>Espárragos</p>
+                    </div>
+                    <div class="dish">
+                        <span>POSTRE</span>
+                        <p>Pastel de elote con rompope<br>Aria de mango</p>
+                    </div>
+                </div>
+
+                <div class="menu-category">
+                    <h4>Menú Vegano y Vegetariano</h4>
+                    <div class="dish">
+                        <p>Canelones de espinaca y champiñones</p>
+                    </div>
+                </div>
+
+                <div class="menu-category">
+                    <h4>Menú Infantil</h4>
+                    <div class="dish">
+                        <p>Pasta con crema<br>Papas a la francesa<br>Tiras de pollo</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="recs-section reveal-node">
+                <h3 class="section-title">Recomendaciones</h3>
+                <div class="recs-grid">
+                    <div class="rec-card">
+                        <h4>CLIMA Y PROTECCIÓN</h4>
+                        <p>Le sugerimos encarecidamente tomar precauciones e ir abrigados ante el clima del lugar.</p>
+                    </div>
+                    <div class="rec-card">
+                        <h4>ACCESO ÚNICO</h4>
+                        <p>Considere que el recinto cuenta con un solo acceso habilitado para la entrada.</p>
+                    </div>
+                    <div class="rec-card">
+                        <h4>VALET PARKING</h4>
+                        <p>Servicio externo a HC, con costo adicional por auto.</p>
+                    </div>
+                    <div class="rec-card">
+                        <h4>ÁREAS DE FUMAR</h4>
+                        <p>Recordamos que el consumo de tabaco está restringido exclusivamente a las áreas exteriores.</p>
+                    </div>
+                    <div class="rec-card">
+                        <h4>MENÚS ESPECIALES</h4>
+                        <p>Si requiere menú vegano, vegetariano o por alergias, solicítelo directamente con el comité organizador en la selección de mesas.</p>
+                    </div>
+                    <div class="rec-card">
+                        <h4>KIT Y GUARDARROPA</h4>
+                        <p>No hay servicio de guardarropa. El kit de graduado será entregado en la entrada.</p>
+                    </div>
+                    <div class="rec-card">
+                        <h4>OBJETOS PERSONALES</h4>
+                        <p>La empresa no se responsabiliza por objetos personales extraviados.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <h2 class="accent-title">EBC</h2>
+            <p style="color: var(--ebc-grey); letter-spacing: 4px; font-size: 0.9rem;">GRADUACIÓN 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        const audio = document.getElementById('gradAudio');
+        const btn = document.getElementById('music-btn');
+
+        function gestionarMusica() {
+            if (audio.paused) {
+                let playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        btn.innerHTML = "🔊";
+                    }).catch(error => {
+                        console.log("Interacción bloqueada por el navegador");
+                    });
+                }
+            } else {
+                audio.pause();
+                btn.innerHTML = "🔇";
+            }
+        }
+
+        ['click', 'touchstart'].forEach(evt => {
+            document.body.addEventListener(evt, () => {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        btn.innerHTML = "🔊";
+                    }).catch(err => console.log("Audio en espera..."));
+                }
+            }, { once: true });
+        });
+    </script>
+</body>
+</html>
