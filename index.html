@@ -217,6 +217,19 @@
             padding-bottom: 10px;
         }
 
+        .location-info {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 50px 30px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 50px; /* Margen añadido para separar las cajas */
+        }
+
+        .location-info:last-child {
+            margin-bottom: 0;
+        }
+
         .location-info h3 {
             font-size: 2rem;
             color: var(--ebc-ivory);
@@ -459,6 +472,14 @@
                     <span>04</span> <span>07</span> <span>26</span>
                 </div>
 
+                <!-- SECCIÓN DE MISA AÑADIDA -->
+                <div class="location-info reveal-node">
+                    <h3>MISA</h3>
+                    <p>El Ranchito<br>17:00 HRS</p>
+                    <a href="https://maps.app.goo.gl/y8kuanCj9hHMwV1n9" target="_blank" class="btn-outline">Ver Ubicación</a>
+                </div>
+
+                <!-- SECCIÓN DE RECEPCIÓN ORIGINAL -->
                 <div class="location-info reveal-node">
                     <h3>RECEPCIÓN</h3>
                     <p>Centro de Convenciones del Estado de México<br></p>
@@ -530,6 +551,13 @@
                         <div class="time-content">
                             <span>01:00 AM</span>
                             <p>Tornafiesta (Chilaquiles)</p>
+                        </div>
+                        </div>
+                    <div class="time-item">
+                        <div class="time-node"></div>
+                        <div class="time-content">
+                            <span>01:15 AM</span>
+                            <p>Norteño</p>
                         </div>
                     </div>
                     <div class="time-item">
